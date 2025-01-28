@@ -1,0 +1,108 @@
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { motion } from "framer-motion";
+
+export default function CareerHub() {
+  const [user, setUser] = useState({ name: "", email: "", rolePreference: "" });
+  const [resume, setResume] = useState(null);
+  const [recommendations, setRecommendations] = useState({ jobs: [], courses: [] });
+
+  const handleResumeUpload = async (e) => {
+    const file = e.target.files[0];
+    setResume(file);
+
+    // Simulating API call for processing resume
+    const fakeResponse = {
+      jobs: ["Software Developer", "Frontend Engineer"],
+      courses: ["React Advanced", "System Design"]
+    };
+
+    setRecommendations(fakeResponse);
+  };
+
+  const handleInputChange = (e) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  return (
+    <motion.div
+      className="p-8 space-y-8"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      {/* Login Section */}
+      <Card>
+        <CardContent className="space-y-4">
+          <h2 className="text-xl font-bold">Login</h2>
+          <Input
+            name="email"
+            placeholder="Email"
+            value={user.email}
+            onChange={handleInputChange}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Profile Section */}
+      <Card>
+        <CardContent className="space-y-4">
+          <h2 className="text-xl font-bold">Profile</h2>
+          <Input
+            name="name"
+            placeholder="Name"
+            value={user.name}
+            onChange={handleInputChange}
+          />
+          <Input
+            name="rolePreference"
+            placeholder="Role Preference"
+            value={user.rolePreference}
+            onChange={handleInputChange}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Resume Upload */}
+      <Card>
+        <CardContent className="space-y-4">
+          <h2 className="text-xl font-bold">Upload Resume</h2>
+          <Input type="file" onChange={handleResumeUpload} />
+          <p className="text-sm text-gray-500">
+            Supported formats: PDF, DOCX. Max size: 2MB
+          </p>
+        </CardContent>
+      </Card>
+
+      {/* Recommendations */}
+      {recommendations.jobs.length > 0 && (
+        <Card>
+          <CardContent className="space-y-4">
+            <h2 className="text-xl font-bold">Recommendations</h2>
+
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold">Eligible Jobs</h3>
+              <ul className="list-disc ml-6">
+                {recommendations.jobs.map((job, index) => (
+                  <li key={index}>{job}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold">Recommended Courses</h3>
+              <ul className="list-disc ml-6">
+                {recommendations.courses.map((course, index) => (
+                  <li key={index}>{course}</li>
+                ))}
+              </ul>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+    </motion.div>
+  );
+}
